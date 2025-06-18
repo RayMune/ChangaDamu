@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blood Donation App</title>
+    <link rel="icon" href="data:,">
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Main Content Wrapper */
+        .main-content {
+            background-color: #ffffff; /* White background for the main content area */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            width: 100%;
+            max-width: 500px; /* Max width for readability */
+            box-sizing: border-box;
+            display: flex; /* Use flexbox for internal alignment */
+            flex-direction: column; /* Stack children vertically */
+            align-items: center; /* Center items horizontally within the container */
+        }
+
+        /* Heading Styling */
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            letter-spacing: 0.5px;
+            width: 100%; /* Ensure heading takes full width of its container */
+        }
+
+        /* Flashed Messages */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: -20px 0 20px 0; /* Adjust margin to integrate better */
+            text-align: center;
+            width: 100%; /* Ensure messages take full width */
+        }
+
+        ul li {
+            color: #28a745; /* Green for success messages */
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        /* Form Container Styling */
+        form {
+            width: 100%; /* Form takes full width of its parent (.main-content) */
+        }
+
+        /* Label and Input Styling */
+        label {
+            display: block; /* Each label on its own line */
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: calc(100% - 22px); /* Full width minus padding and border */
+            padding: 12px 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd; /* Light gray border */
+            border-radius: 5px;
+            font-size: 1em;
+            color: #333;
+            box-sizing: border-box; /* Include padding in width */
+            transition: border-color 0.3s ease; /* Smooth transition for focus */
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus {
+            border-color: #dc3545; /* Red border on focus */
+            outline: none; /* Remove default outline */
+        }
+
+        select {
+            appearance: none; /* Remove default dropdown arrow */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20512%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M250.7%20199.1l-105.4%20105.4c-9.4%209.4-24.6%209.4-33.9%200L5.3%20199.1c-9.4-9.4-9.4-24.6%200-33.9s24.6-9.4%2033.9%200l87.7%2087.7L216.8%20165.2c9.4-9.4%2024.6-9.4%2033.9%200s9.4%2024.6%200%2033.9z%22%2F%3E%3C%2Fsvg%3E'); /* Custom dropdown arrow */
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            padding-right: 30px; /* Space for the custom arrow */
+        }
+
+        select option[value=""] {
+            color: #999; /* Grey out the "--Select--" option */
+        }
+
+        /* Radio Button Styling */
+        input[type="radio"] {
+            margin-right: 8px; /* Space between radio button and label text */
+        }
+
+        /* Grouping for radio buttons */
+        .radio-group {
+            display: flex; /* Arrange radio buttons horizontally */
+            justify-content: center; /* Center the radio buttons */
+            margin-bottom: 20px;
+            width: 100%; /* Take full width */
+        }
+
+        .radio-group label { /* Specific styling for the top-level radio button labels */
+            font-weight: normal; /* Override bold from general label style */
+            margin-right: 20px; /* Space between radio button options */
+            margin-bottom: 0; /* Remove bottom margin from general label */
+            display: inline-block; /* Allow them to sit side-by-side */
+            color: #333;
+        }
+
+        .radio-group label:last-child {
+            margin-right: 0; /* No margin on the last radio option */
+        }
+
+
+        /* Grouping fields */
+        #donor-fields,
+        #recipient-fields {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #eee; /* Dotted line to separate sections */
+            width: 100%; /* Ensure these divs take full width */
+        }
+
+        /* Submit Button */
+        input[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background-color: #dc3545; /* Red blood-themed color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #c82333; /* Darker red on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        input[type="submit"]:active {
+            transform: translateY(0); /* Press effect */
+        }
+    </style>
+    <script>
+        function toggleFields() {
+            const type = document.querySelector('input[name="user_type"]:checked').value;
+            const donorFields = document.getElementById("donor-fields");
+            const recipientFields = document.getElementById("recipient-fields");
+
+            // Reset required attributes for all fields first
+            document.querySelectorAll('#donor-fields input, #donor-fields select').forEach(element => {
+                element.removeAttribute('required');
+            });
+            document.querySelectorAll('#recipient-fields input, #recipient-fields select').forEach(element => {
+                element.removeAttribute('required');
+            });
+
+            if (type === "donor") {
+                donorFields.style.display = "block";
+                recipientFields.style.display = "none";
+                // Add required attributes for donor fields
+                document.querySelector('[name="donor_email"]').setAttribute('required', 'required');
+                document.querySelector('[name="donor_phone"]').setAttribute('required', 'required');
+                document.querySelector('[name="donor_blood_type"]').setAttribute('required', 'required');
+            } else { // type === "recipient"
+                recipientFields.style.display = "block";
+                donorFields.style.display = "none";
+                // Add required attributes for recipient fields
+                document.querySelector('[name="recipient_name"]').setAttribute('required', 'required');
+                document.querySelector('[name="recipient_email"]').setAttribute('required', 'required');
+                document.querySelector('[name="recipient_phone"]').setAttribute('required', 'required');
+                document.querySelector('[name="hospital"]').setAttribute('required', 'required');
+                document.querySelector('[name="ward"]').setAttribute('required', 'required');
+                document.querySelector('[name="bed_number"]').setAttribute('required', 'required');
+                document.querySelector('[name="recipient_blood_type"]').setAttribute('required', 'required');
+            }
+        }
+    </script>
+</head>
+<body onload="toggleFields()">
+    <div class="main-content">
+        <h2>Blood Donation & Request Form</h2>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="user_type" value="donor" checked onchange="toggleFields()"> I Want to Donate Blood
+                </label>
+                <label>
+                    <input type="radio" name="user_type" value="recipient" onchange="toggleFields()"> I Need Blood
+                </label>
+            </div>
+
+            <div id="donor-fields">
+                <label for="donor_email">Email:</label>
+                <input type="email" id="donor_email" name="donor_email"><br>
+
+                <label for="donor_phone">Phone Number:</label>
+                <input type="text" id="donor_phone" name="donor_phone"><br>
+
+                <label for="donor_blood_type">Blood Type:</label>
+                <select id="donor_blood_type" name="donor_blood_type">
+                    <option value="">--Select--</option>
+                    <option>A+</option><option>A-</option>
+                    <option>B+</option><option>B-</option>
+                    <option>AB+</option><option>AB-</option>
+                    <option>O+</option><option>O-</option>
+                </select><br><br>
+            </div>
+
+            <div id="recipient-fields" style="display: none;">
+                <label for="recipient_name">Name:</label>
+                <input type="text" id="recipient_name" name="recipient_name"><br>
+
+                <label for="recipient_email">Email:</label>
+                <input type="email" id="recipient_email" name="recipient_email"><br>
+
+                <label for="recipient_phone">Phone Number:</label>
+                <input type="text" id="recipient_phone" name="recipient_phone"><br>
+
+                <label for="hospital">Hospital Name:</label>
+                <input type="text" id="hospital" name="hospital"><br>
+
+                <label for="ward">Ward Name:</label>
+                <input type="text" id="ward" name="ward"><br>
+
+                <label for="bed_number">Bed Number:</label>
+                <input type="text" id="bed_number" name="bed_number"><br>
+
+                <label for="recipient_blood_type">Blood Type:</label>
+                <select id="recipient_blood_type" name="recipient_blood_type">
+                    <option value="">--Select--</option>
+                    <option>A+</option><option>A-</option>
+                    <option>B+</option><option>B-</option>
+                    <option>AB+</option><option>AB-</option>
+                    <option>O+</option><option>O-</option>
+                </select><br><br>
+            </div>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

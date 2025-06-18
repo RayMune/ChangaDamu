@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Blood App</title>
+</head>
+<body>
+    <h2>Admin Panel</h2>
+    <a href="/">Back to Home</a>
+    <a href="/admin/logout">Logout</a>
+    <h3>Donors</h3>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Blood Type</th>
+        </tr>
+        {% for donor in donors %}
+        <tr>
+            <td>{{ donor.id }}</td>
+            <td>{{ donor.email }}</td>
+            <td>{{ donor.phone }}</td>
+            <td>{{ donor.blood_type }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Recipients</h3>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Hospital</th>
+            <th>Ward</th>
+            <th>Bed Number</th>
+            <th>Blood Type</th>
+        </tr>
+        {% for recipient in recipients %}
+        <tr>
+            <td>{{ recipient.id }}</td>
+            <td>{{ recipient.name }}</td>
+            <td>{{ recipient.email }}</td>
+            <td>{{ recipient.phone }}</td>
+            <td>{{ recipient.hospital }}</td>
+            <td>{{ recipient.ward }}</td>
+            <td>{{ recipient.bed_number }}</td>
+            <td>{{ recipient.blood_type }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
