@@ -2,15 +2,31 @@
 <html>
 <head>
     <title>Admin Panel - Blood App</title>
+    <style>
+        td:contains('Urgent') {
+            color: red;
+            font-weight: bold;
+        }
+        td:contains('Medium') {
+            color: orange;
+        }
+        td:contains('Low') {
+            color: green;
+        }
+    </style>
 </head>
 <body>
     <h2>Admin Panel</h2>
     <a href="/">Back to Home</a>
     <a href="/admin/logout">Logout</a>
+    <div class="stats">
+        <p>Total Visits: {{ visit_count }}</p>
+    </div>
     <h3>Donors</h3>
     <table border="1">
         <tr>
             <th>ID</th>
+            <th>NAME</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Blood Type</th>
@@ -18,6 +34,7 @@
         {% for donor in donors %}
         <tr>
             <td>{{ donor.id }}</td>
+            <td>{{ donor.name }}</td>
             <td>{{ donor.email }}</td>
             <td>{{ donor.phone }}</td>
             <td>{{ donor.blood_type }}</td>
@@ -36,6 +53,7 @@
             <th>Ward</th>
             <th>Bed Number</th>
             <th>Blood Type</th>
+            <th>Urgency Level</th>    <!-- Add this header -->
         </tr>
         {% for recipient in recipients %}
         <tr>
@@ -47,6 +65,7 @@
             <td>{{ recipient.ward }}</td>
             <td>{{ recipient.bed_number }}</td>
             <td>{{ recipient.blood_type }}</td>
+            <td>{{ recipient.urgency_level }}</td>    <!-- Add this cell -->
         </tr>
         {% endfor %}
     </table>

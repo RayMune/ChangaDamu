@@ -22,6 +22,7 @@ class Recipient(Base):
     ward = Column(String(50))
     bed_number = Column(String(10))
     blood_type = Column(String(5))
+    urgency_level = Column(String(10))
 
 # One-time DB creation
 if __name__ == "__main__":

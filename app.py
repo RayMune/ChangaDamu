@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
 from flask import session as flask_session
 import os
+from datetime import datetime
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -20,6 +21,7 @@ session = Session()
 class Donor(Base):
     __tablename__ = 'donors'
     id = Column(Integer, primary_key=True)
+    name = Column(String(100))  # Add this line
     email = Column(String(100))
     phone = Column(String(20))
     blood_type = Column(String(5))
@@ -34,6 +36,7 @@ class Recipient(Base):
     ward = Column(String(50))
     bed_number = Column(String(10))
     blood_type = Column(String(5))
+    urgency_level = Column(String(10))  # Add this line
 
 # Create tables on first run
 Base.metadata.create_all(engine)
@@ -43,9 +46,22 @@ Base.metadata.create_all(engine)
 def home():
     if request.method == "POST":
         user_type = request.form.get("user_type")
+        email = request.form.get("recipient_email" if user_type == "recipient" else "donor_email")
 
+        # Check for existing email
+        if user_type == "donor":
+            existing_user = session.query(Donor).filter_by(email=email).first()
+        else:
+            existing_user = session.query(Recipient).filter_by(email=email).first()
+
+        if existing_user:
+            flash("This email has already been registered.")
+            return redirect("/")
+
+        # Continue with existing submission logic
         if user_type == "donor":
             donor = Donor(
+                name=request.form.get("donor_name"),  # Add this line
                 email=request.form.get("donor_email"),
                 phone=request.form.get("donor_phone"),
                 blood_type=request.form.get("donor_blood_type")
@@ -62,7 +78,8 @@ def home():
                 hospital=request.form.get("hospital"),
                 ward=request.form.get("ward"),
                 bed_number=request.form.get("bed_number"),
-                blood_type=request.form.get("recipient_blood_type")
+                blood_type=request.form.get("recipient_blood_type"),
+                urgency_level=request.form.get("urgency_level")  # Add this line
             )
             session.add(recipient)
             session.commit()
@@ -94,13 +111,16 @@ def admin():
 
     donors = session.query(Donor).all()
     recipients = session.query(Recipient).all()
-    return render_template("admin.html", donors=donors, recipients=recipients)
+    visit_count = flask_session.get('visits', 0)
+    return render_template("admin.html", donors=donors, recipients=recipients, visit_count=visit_count)
 
 @app.route("/admin/logout")
 def admin_logout():
     flask_session.pop("admin_logged_in", None)
     flash("Logged out successfully.")
     return redirect("/admin")
+
+
 
 if __name__ == "__main__":
     app.run(debug=False, host='0.0.0.0', port=5000)

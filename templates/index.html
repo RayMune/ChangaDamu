@@ -41,6 +41,24 @@
             width: 100%; /* Ensure heading takes full width of its container */
         }
 
+        h1 {
+            text-align: center;
+            color: #dc3545; /* Blood red color */
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            letter-spacing: 0.5px;
+            width: 100%; /* Ensure heading takes full width of its container */
+        }
+
+        h4.sub-heading {
+            text-align: center;
+            color: #666;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            width: 100%; /* Ensure sub-heading takes full width */
+        }
+
         /* Flashed Messages */
         ul {
             list-style: none;
@@ -201,13 +219,15 @@
                 document.querySelector('[name="ward"]').setAttribute('required', 'required');
                 document.querySelector('[name="bed_number"]').setAttribute('required', 'required');
                 document.querySelector('[name="recipient_blood_type"]').setAttribute('required', 'required');
+                document.querySelector('[name="urgency_level"]').setAttribute('required', 'required');
             }
         }
     </script>
 </head>
 <body onload="toggleFields()">
     <div class="main-content">
-        <h2>Blood Donation & Request Form</h2>
+        <h1>Blood Donation and Request Form</h1>
+        <h4 class="sub-heading">only donate blood at a registered hospital and demand to see a doctor's note from the recipient</h4>
 
         {% with messages = get_flashed_messages() %}
           {% if messages %}
@@ -230,6 +250,9 @@
             </div>
 
             <div id="donor-fields">
+                <label for="donor_name">Name:</label>
+                <input type="text" id="donor_name" name="donor_name" required><br>
+
                 <label for="donor_email">Email:</label>
                 <input type="email" id="donor_email" name="donor_email"><br>
 
@@ -265,13 +288,21 @@
                 <label for="bed_number">Bed Number:</label>
                 <input type="text" id="bed_number" name="bed_number"><br>
 
-                <label for="recipient_blood_type">Blood Type:</label>
+                <label for="recipient_blood_type">My Blood Type is:</label>
                 <select id="recipient_blood_type" name="recipient_blood_type">
                     <option value="">--Select--</option>
                     <option>A+</option><option>A-</option>
                     <option>B+</option><option>B-</option>
                     <option>AB+</option><option>AB-</option>
                     <option>O+</option><option>O-</option>
+                </select><br>
+
+                <label for="urgency_level">Urgency Level:</label>
+                <select name="urgency_level" id="urgency_level" required>
+                    <option value="" disabled selected>Select Urgency Level</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Urgent">Urgent</option>
                 </select><br><br>
             </div>
 
