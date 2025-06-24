@@ -41,9 +41,24 @@ class Recipient(Base):
 # Create tables on first run
 Base.metadata.create_all(engine)
 
+# Visitor log setup
+VISIT_LOG = "visit_log.txt"
+
+def log_visit():
+    with open(VISIT_LOG, "a") as f:
+        f.write(f"{datetime.now().isoformat()}\n")
+
+def get_visit_count():
+    if not os.path.exists(VISIT_LOG):
+        return 0
+    with open(VISIT_LOG, "r") as f:
+        return len(f.readlines())
+
 # Routes
 @app.route("/", methods=["GET", "POST"])
 def home():
+    if request.method == "GET":
+        log_visit()
     if request.method == "POST":
         user_type = request.form.get("user_type")
         email = request.form.get("recipient_email" if user_type == "recipient" else "donor_email")
@@ -111,8 +126,8 @@ def admin():
 
     donors = session.query(Donor).all()
     recipients = session.query(Recipient).all()
-    visit_count = flask_session.get('visits', 0)
-    return render_template("admin.html", donors=donors, recipients=recipients, visit_count=visit_count)
+    visit_count = get_visit_count()
+    return render_template("admin.html", visit_count=visit_count, donors=donors, recipients=recipients)
 
 @app.route("/admin/logout")
 def admin_logout():
