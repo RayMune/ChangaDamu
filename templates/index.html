@@ -186,6 +186,25 @@
         input[type="submit"]:active {
             transform: translateY(0); /* Press effect */
         }
+
+        /* Footer Styling */
+        .site-footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background: #f8f8f8;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 15px;
+            border-top: 1px solid #ddd;
+            z-index: 100;
+        }
+
+        .site-footer strong {
+            color: #333;
+        }
     </style>
     <script>
         function toggleFields() {
@@ -309,5 +328,11 @@
             <input type="submit" value="Submit">
         </form>
     </div>
+
+    <footer class="site-footer">
+        In case of any issue kindly contact: <br>
+        <strong>Independent Medico-Legal Unit</strong> - 0800720627 or 
+        <strong>Kenya Human Rights Commission</strong> - 0728606583
+    </footer>
 </body>
 </html>
